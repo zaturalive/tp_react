@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; //yeah
 import Suggestion from "./suggestion";
 
 const Search = () => {
