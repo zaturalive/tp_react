@@ -30,7 +30,7 @@ const Search = () => {
 
   useEffect(() => {
     fetchCountries();
-  }, []); //Dfrgrhha
+  }, []);
 
   const handleChange = (event) => {
     setValue(event.target.value);
