@@ -1,57 +1,58 @@
-import { useState, useEffect } from "react"; //yeah
-import Suggestion from "./suggestion";
+import React, { useState, useEffect } from "react";
+import { Input } from "./Input";
+import { Button } from "./Button";
 
-const Search = () => {
-  const [value, setValue] = useState("fr");
-  const [data, setData] = useState([]);
-  const [filteredCountries, setFilteredCountries] = useState([]);
+const Search = ({ onSearchChange, onDataCountryChange }) => {
+  const [value, setValue] = useState("");
 
-  function fetchCountries() {
-    fetch("https://restcountries.com/v3.1/all")
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    onSearchChange(newValue);
+    return newValue;
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      oneResponse();
+    }
+  };
+
+  const oneResponse = () => {
+    fetch(`https://restcountries.com/v3.1/name/${value}`)
       .then((response) => response.json())
       .then((data) => {
-        setData(data);
+        if (Array.isArray(data)) {
+          const exactMatch = data.find(
+            (country) =>
+              country.name.common.toLowerCase() === value.toLowerCase()
+          );
+          if (exactMatch) {
+            console.log(exactMatch);
+            onDataCountryChange(exactMatch); // Utilisez onDataCountryChange ici
+          } else {
+            console.error(`Erreur : aucun pays ne s'appelle ${value}`);
+          }
+        } else {
+          console.error("Erreur : la valeur ne peut pas être trouvée", data);
+        }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Erreur :", error);
       });
-  }
-
-  function fetchFilteredCountries(name) {
-    const filtered = data.filter((country) => {
-      return country.name.common.toLowerCase().startsWith(name.toLowerCase());
-    });
-    setFilteredCountries(filtered);
-  }
-
-  useEffect(() => {
-    fetchFilteredCountries(value);
-  }, [value, data]);
-
-  useEffect(() => {
-    fetchCountries();
-  }, []);
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
   };
 
   return (
-    <div>
-      <input placeholder={value} value={value} onChange={handleChange} />{" "}
-      {filteredCountries.map((country, index) => (
-        <div key={index}>
-          <h2>{country.name.common}</h2>
-          <img src={country.flags.png} alt={country.name.common} />
-        </div>
-        /* // au lieu d'avoir beaucoup de code dans le return, on fait un composant qui
-// va prendre le data filtered, et va afficher lui même les donnéesv*/
-      ))}
-      {/* <Suggestion /> */}
+    <div className="searchSide">
+      <Input
+        placeholder={"value"}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown} // Ajoutez cette ligne
+      />
+      <Button onClick={oneResponse}>Search !</Button>
     </div>
   );
 };
 
 export default Search;
-// au lieu d'avoir beaucoup de code dans le return, on fait un composant qui
-// va prendre le data filtered, et va afficher lui même les données

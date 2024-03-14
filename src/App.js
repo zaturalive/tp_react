@@ -1,10 +1,12 @@
 import "./App.css";
-//import { createBrowserRouter, RouterProvider } from "react-router-dom"; // Import the 'RouterProvider' component
-import Search from "./components/Search";
-//const router = createBrowserRouter([{ path: "/", element: <Search /> }]);
+import Main from "./components/Main";
 
 function App() {
-  return <Search />;
+  return (
+    <>
+      <Main />
+    </>
+  );
 }
 
 export default App;

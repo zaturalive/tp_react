@@ -1,0 +1,20 @@
+.SuggestionDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+}
+.SuggestionDiv img {
+  width: 50px;
+}
+
+h2 {
+  margin: 0;
+}
+
+.suggestion {
+  margin: 0 20%;
+}
